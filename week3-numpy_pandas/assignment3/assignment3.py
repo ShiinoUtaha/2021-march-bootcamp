@@ -1,9 +1,18 @@
+import numpy as np
+
 # Q1.
 """
 Implement cross product function for two python list.
 Reference https://numpy.org/doc/stable/reference/generated/numpy.cross.html
 Only take care of 1-d list use case.
 """
+
+def cross(a, b):
+	c = [a[1]*b[2] - a[2]*b[1],
+		a[2]*b[0] - a[0]*b[2],
+		a[0]*b[1] - a[1]*b[0]]
+
+	return c
 
 # Q2.
 """
@@ -26,6 +35,23 @@ Only take care of 1-d list use case.
 checkOrders(["()", "(", "{}[]", "[][][]", "[{]{]"] return [True, False, True, True, False]
 """
 
+def checkOrders(orders: [str]) -> [bool]:
+	list0 = []
+	SYMBOLS = {'}':'{', ']':'[', ')':'('}
+	SYMBOLS_L = SYMBOLS.values()
+	SYMBOLS_R = SYMBOLS.keys()
+	for c in orders:
+		if c in SYMBOLS_L:
+			list0.append(c)
+		elif c in SYMBOLS_R:
+			if list0 and list0[-1] == SYMBOLS[c]:
+				list0.pop()
+			else:
+				return False
+
+	return not list0
+
+
 # Q3
 """
 我们在进行交易的时候通常会选择一家broker公司而不是直接与交易所交易。
@@ -47,6 +73,7 @@ Def slowest(orders: [[int]]) -> int:
 slowest([[0, 2], [1, 5], [2, 7], [0, 16], [3, 19], [4, 25], [2, 35]]) return 2
 """
 
+def slowest(orders: [[int]]) -> int:
 
 # Q4
 """
@@ -64,3 +91,16 @@ slowest([[0, 2], [1, 5], [2, 7], [0, 16], [3, 19], [4, 25], [2, 35]]) return 2
 def judgeRobotMove(moves: str) -> bool:
 
 """
+def judgeRobotMove(moves: str) -> bool:
+	x = 0
+	y = 0
+	for move in moves:
+		if move == "U":
+			y += 1
+		elif move == "D":
+			y -= 1
+		elif move == "L":
+			x -= 1
+		elif move == "R":
+			x += 1
+	return(x == 0 and y == 0)
