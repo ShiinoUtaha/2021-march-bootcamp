@@ -7,7 +7,7 @@ Reference https://numpy.org/doc/stable/reference/generated/numpy.cross.html
 Only take care of 1-d list use case.
 """
 
-def cross(a, b):
+def cross(a: [int], b: [int]) -> int
 	c = [a[1]*b[2] - a[2]*b[1],
 		a[2]*b[0] - a[0]*b[2],
 		a[0]*b[1] - a[1]*b[0]]
@@ -74,6 +74,22 @@ slowest([[0, 2], [1, 5], [2, 7], [0, 16], [3, 19], [4, 25], [2, 35]]) return 2
 """
 
 def slowest(orders: [[int]]) -> int:
+	broker = []
+	time = []
+
+	for i in orders:
+		broker.append(i[0])
+		time.append(i[1])
+	deltatime = [time[0]]
+
+	for i in range(1,len(time)):
+		deltatime.append(time[i] - time[i - 1])
+
+	df1 = pd.DataFrame({'id':broker, 'time':deltatime})
+	grouped = df1.groupby('id')
+	df2 = grouped.aggregate(np.sum)
+	max_time = df2.idxmax()
+	return max_time['time']
 
 # Q4
 """
