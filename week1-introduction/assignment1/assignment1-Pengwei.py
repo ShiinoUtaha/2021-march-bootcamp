@@ -9,13 +9,13 @@
 
 
 def factorial(x: int) -> int:
-    if x < 1:
-        raise Exception("input can not be < 1")
+    if x<0:
+        print("请输入大于一的整数")
+    if x == 0:
+        return 1
+    else:
+        return x * factorial(x - 1)
 
-    res = 1
-    for i in range(1, x + 1):
-        res *= i
-    return res
 
 assert factorial(0) == 1
 assert factorial(1) == 1
@@ -26,7 +26,10 @@ assert factorial(9) == 362880
 # [1 + 2 + ... + x] and x is always >= 1.
 
 def print_sum(x: int) -> str:
-    return str(sum(range(x + 1)))
+    if x == 1:
+        return "1"
+    else:
+        return str(x+int(print_sum(x-1)))
 
 
 assert print_sum(1) == "1"
@@ -37,8 +40,7 @@ assert print_sum(5) == "15"
 # Q3. Write a program to check is a year is leap year (x is always > 0)
 
 def is_leap_year(year: int) -> bool:
-    return year % 400 == 0 or (year % 4 == 0 and year % 100 != 0)
-
+    return year%4 == 0 and (year%100 != 0 or year%400 == 0)
 
 
 assert is_leap_year(2000)
@@ -50,8 +52,7 @@ assert not is_leap_year(2001)
 # Q4. Write a program to convert a list of lowercase words to uppercase words.
 
 def to_upper_case(words: [str]) -> [str]:
-    return [w.upper() for w in words]
-
+    return [word.upper() for word in words]
 
 
 assert to_upper_case(["abc", "de"]) == ["ABC", "DE"]
@@ -62,9 +63,7 @@ assert to_upper_case(["Amazon", "Apple"]) == ["AMAZON", "APPLE"]
 # https://baike.baidu.com/item/%E5%BC%82%E6%88%96/10993677?fromtitle=xor&fromid=64178
 
 def xor(a: bool, b: bool) -> bool:
-    return a != b
-
-
+    return a != b:
 
 assert not xor(True, True)
 assert xor(True, False)

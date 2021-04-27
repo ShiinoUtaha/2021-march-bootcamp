@@ -7,7 +7,7 @@ import pandas as pd
 import datetime as dt
 
 RAW_DATA_NAME = "data/QQQ.csv"
-ANALYSIS_RESULT_DATA_NAME = "data/QQQ-result.csv"
+ANALYSIS_RESULT_DATA_NAME = "data/mike_QQQ_result.csv"
 
 
 def read_data() -> pd.DataFrame:
@@ -44,11 +44,11 @@ def calculate_scheduled_investment(data: pd.DataFrame) -> ():
         #   如果不购买，append前日仓位和花费
         #   然后总需要根据open_price计算asset, 并且加入assets
         if is_monday(date):
-            positions.append(positions[-1] + 10)
-            cost.append(cost[-1] + open_price * 10)
+            positions.append(positions[-1] + shares)
+            cost.append(cost[i - 1] + shares * open_price)
         else:
             positions.append(positions[-1])
-            cost.append(cost[-1])
+            cost.append(cost[i - 1])
         assets.append(open_price * positions[-1])
     print(len(positions))
     return positions, cost, assets
@@ -59,20 +59,21 @@ def calculate_scheduled_investment(data: pd.DataFrame) -> ():
 
 # -- TODO: Part 2 (START)
 def export_result() -> float:
-    # 生成 {first_name}_QQQ-result.csv, 目标是跟QQQ-result-expected.csv 一致
+    # 生成 {first_name}_QQQ_result.csv, 目标是跟QQQ_result_expected.csv 一致
     # 在这里调用 calculate_scheduled_investment, 并且赋值
     # 到asset 和cost.
     # 最后返回十年的年化率
-    positions, cost, assets = calculate_scheduled_investment(read_data())
-    param = pd.DataFrame({"POSITIONS":positions,"COST":cost,"ASSETS":assets})
-    output = read_data().join(param)
-    output.to_csv("data/wei_QQQ-result.csv")
-    return annual_return(10, assets[-1] / cost[-1])  # 10 years
+    data = read_data()
+    data['POSITIONS'], cost, asset = calculate_scheduled_investment(read_data())
+    data['COST'] = cost
+    data['ASSETS'] = asset
+    write_data(data)
+    return annual_return(10, asset[-1] / cost[-1])  # 10 years
 
 
 # -- TODO: Part 2 (END)
 
 
 if __name__ == '__main__':
-    print(calculate_scheduled_investment(read_data()))
+    # print(calculate_scheduled_investment(read_data()))
     print("Investment Return: ", export_result())
